@@ -53,6 +53,7 @@ export default function Home() {
   }
 // todo  responsive design imporvments 
 // todo button to manually download the image 5ater tawa just after the resize 
+// todo real time resizing based on user current input 
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300 py-6">
