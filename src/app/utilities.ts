@@ -17,4 +17,3 @@ const rezise = (file: File, maxWith: number, maxHeight: number) =>
   });
 
 export default rezise;
-
