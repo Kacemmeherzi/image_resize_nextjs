@@ -1,10 +1,11 @@
 "use client";
-
 import { useState } from "react";
 
 
 export default function Home() {
   const [image, setImage] = useState<File | null>(null);
+  const [height, setHeight] = useState<number | null>(null);
+  const [width, setWidth] = useState<number | null>(null);
 
   
 
@@ -48,9 +49,10 @@ export default function Home() {
             Height
           </label>
           <input
-            type="text"
+            type="number"
             id="height"
-            placeholder="Height"
+            placeholder="Height" onChange={(e) => {setHeight(parseFloat(e.target.value));
+            }}  
             className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -62,9 +64,11 @@ export default function Home() {
             Width
           </label>
           <input
-            type="text"
+            type="Number"
             id="weight"
-            placeholder="Width"
+            placeholder="Width" onChange={(e) => {setWidth(parseFloat(e.target.value)); 
+              console.log(width);
+            }} 
             className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
