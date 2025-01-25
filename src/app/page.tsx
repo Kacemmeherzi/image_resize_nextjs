@@ -51,19 +51,21 @@ export default function Home() {
       URL.revokeObjectURL(img.src);
     };
   }
+// todo  responsive design imporvments 
+// todo button to manually download the image 5ater tawa just after the resize 
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300 py-6">
       <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Upload and Resize Your Image
       </h1>
-
-      <div className="mb-6">
+      
+      <div className="flex justify-center  mb-6">
         {image ? (
           <img
             src={URL.createObjectURL(image)}
             alt="Uploaded Preview"
-            className="w-100 h-60 object-fit rounded-lg shadow-lg"
+            className="w-1/2 object-fit rounded-lg p-4 shadow-lg"
           />
         ) : (
           <div className="w-40 h-40 flex items-center justify-center bg-gray-200 rounded-lg shadow-lg text-gray-500">
