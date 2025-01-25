@@ -1,11 +1,26 @@
 "use client";
 import { useState } from "react";
-
-
+import rezise from "./utilities";
 export default function Home() {
   const [image, setImage] = useState<File | null>(null);
   const [height, setHeight] = useState<number | null>(null);
   const [width, setWidth] = useState<number | null>(null);
+
+ async function resizeImage() {
+    if (!image || !height || !width) {
+      return;
+    }
+
+    await rezise(image, height, width)
+    .then((resizedImage ) => {
+      const resizedFile = new File([resizedImage as Blob], image.name, {
+        type: image.type,
+      });
+
+      setImage(resizedFile);
+    }).catch((error) => { console.error(error); });
+  }
+  
 
   
 
@@ -20,7 +35,7 @@ export default function Home() {
           <img
             src={URL.createObjectURL(image)}
             alt="Uploaded Preview"
-            className="w-40 h-40 object-cover rounded-lg shadow-lg"
+            className="w-100 h-60 object-fit rounded-lg shadow-lg"
           />
         ) : (
           <div className="w-40 h-40 flex items-center justify-center bg-gray-200 rounded-lg shadow-lg text-gray-500">
@@ -67,14 +82,14 @@ export default function Home() {
             type="Number"
             id="weight"
             placeholder="Width" onChange={(e) => {setWidth(parseFloat(e.target.value)); 
-              console.log(width);
+              
             }} 
             className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
-      <button className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+      <button onClick={resizeImage} className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
         Resize
       </button>
     </div>
