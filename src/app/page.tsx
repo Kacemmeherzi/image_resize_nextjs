@@ -6,23 +6,51 @@ export default function Home() {
   const [height, setHeight] = useState<number | null>(null);
   const [width, setWidth] = useState<number | null>(null);
 
- async function resizeImage() {
+  async function resizeImage() {
     if (!image || !height || !width) {
       return;
     }
 
     await rezise(image, height, width)
-    .then((resizedImage ) => {
-      const resizedFile = new File([resizedImage as Blob], image.name, {
-        type: image.type,
+      .then((resizedImage) => {
+        const resizedFile = new File([resizedImage as Blob], image.name, {
+          type: image.type,
+        });
+
+        setImage(resizedFile);
+        downloadImage();
+      })
+      .catch((error) => {
+        console.error(error);
       });
-
-      setImage(resizedFile);
-    }).catch((error) => { console.error(error); });
   }
-  
+  function downloadImage() {
+    if (!image) {
+      return;
+    }
 
-  
+    const url = URL.createObjectURL(image);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = image.name;
+    a.click();
+  }
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+    const img = new Image();
+    img.src = URL.createObjectURL(file!);
+    img.onload = () => {
+      setHeight(img.height);
+      setWidth(img.width);
+      console.log(img.height, img.width);
+
+      // Revoke object URL to save memory
+      URL.revokeObjectURL(img.src);
+    };
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300 py-6">
@@ -48,9 +76,7 @@ export default function Home() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => {
-            setImage(e.target.files?.[0] || null);
-          }}
+          onChange={(e) => handleImageUpload(e)}
           className="block w-full text-sm font-bold text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
       </div>
@@ -66,8 +92,11 @@ export default function Home() {
           <input
             type="number"
             id="height"
-            placeholder="Height" onChange={(e) => {setHeight(parseFloat(e.target.value));
-            }}  
+            value={JSON.stringify(height)}
+            placeholder="Height"
+            onChange={(e) => {
+              setHeight(parseFloat(e.target.value));
+            }}
             className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -81,15 +110,20 @@ export default function Home() {
           <input
             type="Number"
             id="weight"
-            placeholder="Width" onChange={(e) => {setWidth(parseFloat(e.target.value)); 
-              
-            }} 
+            value={JSON.stringify(width)}
+            placeholder="Width"
+            onChange={(e) => {
+              setWidth(parseFloat(e.target.value));
+            }}
             className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
-      <button onClick={resizeImage} className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+      <button
+        onClick={resizeImage}
+        className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+      >
         Resize
       </button>
     </div>
