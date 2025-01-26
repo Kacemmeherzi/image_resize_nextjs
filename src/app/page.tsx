@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import rezise from "./utilities";
+import Imagenext from "next/image";
 export default function Home() {
   const [image, setImage] = useState<File | null>(null);
   const [height, setHeight] = useState<number | null>(null);
@@ -63,7 +64,7 @@ export default function Home() {
       
       <div className="flex justify-center  mb-6">
         {image ? (
-          <img
+          <Imagenext
             src={URL.createObjectURL(image)}
             alt="Uploaded Preview"
             className="w-1/2 object-fit rounded-lg p-4 shadow-lg"
